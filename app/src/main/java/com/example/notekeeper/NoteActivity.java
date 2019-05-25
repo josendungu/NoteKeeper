@@ -45,7 +45,7 @@ public class NoteActivity extends AppCompatActivity {
 
     private void displayNote(Spinner spinnerCourses, EditText title , EditText text) {
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
-        int courseIndex = courses.indexOf(mNote.getCourse().getCourseId());
+        int courseIndex = courses.indexOf(mNote.getCourse());
         spinnerCourses.setSelection(courseIndex);
 
         text.setText(mNote.getText());
@@ -53,7 +53,7 @@ public class NoteActivity extends AppCompatActivity {
 
         Log.d(TAG, "displayNote: All Courses: " + courses);
         Log.d(TAG, "displayNote: CourseID selected "+ courseIndex);
-        Log.d(TAG, "displayNote: Course selected "+ mNote.getCourse().getCourseId());
+        Log.d(TAG, "displayNote: Course selected "+ mNote.getCourse());
 
     }
 

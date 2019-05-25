@@ -2,6 +2,7 @@ package com.example.notekeeper;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Created by Jim.
@@ -11,6 +12,7 @@ public final class NoteInfo implements Parcelable{
     private CourseInfo mCourse;
     private String mTitle;
     private String mText;
+    private static final String TAG = "NoteInfo";
 
     public NoteInfo(CourseInfo course, String title, String text) {
         mCourse = course;
@@ -82,6 +84,8 @@ public final class NoteInfo implements Parcelable{
         dest.writeParcelable(mCourse, 0);
         dest.writeString(mTitle);
         dest.writeString(mText);
+
+        Log.d(TAG, "writeToParcel: Course "+ mCourse);
 
     }
 

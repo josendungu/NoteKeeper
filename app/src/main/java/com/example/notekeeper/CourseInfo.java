@@ -91,8 +91,8 @@ public final class CourseInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTitle);
         dest.writeString(mCourseId);
+        dest.writeString(mTitle);
         dest.writeTypedList(mModules);
 
     }

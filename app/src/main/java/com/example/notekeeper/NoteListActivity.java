@@ -48,6 +48,7 @@ public class NoteListActivity extends AppCompatActivity {
         listNotes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "onItemClick: Clicked item at position "+ position);
                 Intent intent = new Intent(NoteListActivity.this, NoteActivity.class);
                 NoteInfo note = (NoteInfo) listNotes.getItemAtPosition(position);
                 Log.d(TAG, "onItemClick: putting extra: " + note);

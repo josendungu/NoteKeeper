@@ -71,8 +71,8 @@ public final class ModuleInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(mTitle);
         dest.writeString(mModuleId);
+        dest.writeString(mTitle);
         dest.writeByte((byte)(mIsComplete ? 1 : 0));
 
     }
