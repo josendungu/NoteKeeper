@@ -2,12 +2,8 @@ package com.example.notekeeper;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -17,9 +13,39 @@ import android.widget.Spinner;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
-    public static final String NOTE_INFO = "com.example.notekeeper.NOTE_INFO";
+    public static final String NOTE_POSITION = "com.example.notekeeper.NOTE_POSITION";
+    public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
     private static final String TAG = "NoteActivity";
+    private boolean mIsNewNote;
+    private Spinner mSpinnerCourses;
+    private EditText mTextNoteTitle;
+    private EditText mTextNoteText;
+    private int mNotePosition;
+    private boolean mIsCancelling;
+
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mIsCancelling){
+            if (mIsNewNote){
+                DataManager.getInstance().removeNote(mNotePosition);
+            }
+        }else {
+            saveNote();
+        }
+    }
+
+    private void saveNote() {
+        mNote.setCourse((CourseInfo) mSpinnerCourses.getSelectedItem());
+        mNote.setTitle(mTextNoteTitle.getText().toString());
+        mNote.setText(mTextNoteText.getText().toString());
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,18 +54,19 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinnerCourses = (Spinner) findViewById(R.id.spinner_courses);
+        mSpinnerCourses = (Spinner) findViewById(R.id.spinner_courses);
         List<CourseInfo> courses = DataManager.getInstance().getCourses();
         ArrayAdapter<CourseInfo> adapterCourses = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courses);
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCourses.setAdapter(adapterCourses);
+        mSpinnerCourses.setAdapter(adapterCourses);
         
         readDisplayStateValues();
 
-        EditText textNoteTitle = (EditText) findViewById(R.id.text_note_title);
-        EditText textNoteText = (EditText) findViewById(R.id.text_note_text);
+        mTextNoteTitle = (EditText) findViewById(R.id.text_note_title);
+        mTextNoteText = (EditText) findViewById(R.id.text_note_text);
 
-        displayNote(spinnerCourses, textNoteTitle, textNoteText);
+        if(!mIsNewNote)
+            displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
 
     }
 
@@ -51,17 +78,29 @@ public class NoteActivity extends AppCompatActivity {
         text.setText(mNote.getText());
         title.setText(mNote.getTitle());
 
-        Log.d(TAG, "displayNote: All Courses: " + courses);
-        Log.d(TAG, "displayNote: CourseID selected "+ courseIndex);
-        Log.d(TAG, "displayNote: Course selected "+ mNote.getCourse());
 
     }
 
     private void readDisplayStateValues() {
 
         Intent intent = getIntent();
-        mNote = intent.getParcelableExtra(NOTE_INFO);
-        Log.d(TAG, "readDisplayStateValues: gotten note "+ mNote);
+        int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+        mIsNewNote = position == POSITION_NOT_SET;
+        if(mIsNewNote){
+            createNewNote();
+        } else {
+            mNote = DataManager.getInstance().getNotes().get(position);
+
+        }
+
+
+
+    }
+
+    private void createNewNote() {
+        DataManager dm = DataManager.getInstance();
+        mNotePosition = dm.createNewNote();
+        mNote = dm.getNotes().get(mNotePosition);
     }
 
     @Override
@@ -79,10 +118,25 @@ public class NoteActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send_mail) {
+            sendEmail();
             return true;
+        } else if (id == R.id.action_cancel){
+            mIsCancelling = true;
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendEmail() {
+        CourseInfo course = (CourseInfo) mSpinnerCourses.getSelectedItem();
+        String subject = mTextNoteText.getText().toString();
+        String text = "Checkout what I learned in the Pluralsight course \"" + course.getTitle() + "\"\n" + mTextNoteText.getText().toString();
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc2822");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        startActivity(intent);
     }
 }
