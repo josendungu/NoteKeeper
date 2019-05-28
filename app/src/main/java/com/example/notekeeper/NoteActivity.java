@@ -38,7 +38,7 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_note);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -47,7 +47,7 @@ public class NoteActivity extends AppCompatActivity {
         ArrayAdapter<CourseInfo> adapterCourses = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, courses);
         adapterCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinnerCourses.setAdapter(adapterCourses);
-        
+
         readDisplayStateValues();
 
         if (savedInstanceState == null){
@@ -78,7 +78,7 @@ public class NoteActivity extends AppCompatActivity {
 
 
     /**
-     * Initiated when the NoteActivity is terminated in any way
+     * Initiated when the NoteActivity1 is terminated in any way
      *
      */
     @Override
