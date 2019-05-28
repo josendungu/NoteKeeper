@@ -1,14 +1,17 @@
 package com.example.notekeeper;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -94,7 +97,6 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
-
     private void storePreviousNoteValues() {
         if (mIsNewNote)
             return;
@@ -145,6 +147,7 @@ public class NoteActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+        mNotePosition = position;
         mIsNewNote = position == POSITION_NOT_SET;
         if(mIsNewNote){
             createNewNote();
@@ -181,9 +184,28 @@ public class NoteActivity extends AppCompatActivity {
         } else if (id == R.id.action_cancel){
             mIsCancelling = true;
             finish();
+        } else if (id == R.id.action_next) {
+            int lastNoteIndex = DataManager.getInstance().getNotes().size() - 1;
+            if (mNotePosition < lastNoteIndex){
+                moveNext();
+            }else {
+                Toast toast = Toast.makeText(this, "End of Notes!" , Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void moveNext() {
+        saveNote();
+        ++mNotePosition;
+        mNote = DataManager.getInstance().getNotes().get(mNotePosition);
+        saveOriginalNoteValues();
+
+        displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
     }
 
     private void sendEmail() {
