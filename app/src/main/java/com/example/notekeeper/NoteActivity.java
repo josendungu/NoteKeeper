@@ -48,21 +48,23 @@ public class NoteActivity extends AppCompatActivity {
         readDisplayStateValues();
 
         if (savedInstanceState == null){
-            saveOriginalNoteValues();
+            saveOriginalNoteValues();//Activity has not been started at any given time
         } else {
-            restoreOriginalNoteValues(savedInstanceState);
+            restoreOriginalNoteValues(savedInstanceState);//activity has been started before hence restoring original values of the courses from the time it was first launches
         }
         mTextNoteTitle = (EditText) findViewById(R.id.text_note_title);
         mTextNoteText = (EditText) findViewById(R.id.text_note_text);
 
-        if(!mIsNewNote)
+        if(!mIsNewNote) {
             displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
+        }//if user wants to write a new note just display default... if note selected display the note details
+
 
     }
 
 
     /**
-     *
+     *Restoring original values that were first set when activity was started.... Used in case the activity is destroyed.
      * @param savedInstanceState
      */
     private void restoreOriginalNoteValues(Bundle savedInstanceState) {
@@ -72,21 +74,26 @@ public class NoteActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Initiated when the NoteActivity is terminated in any way
+     *
+     */
     @Override
     protected void onPause() {
         super.onPause();
 
         if (mIsCancelling){
             if (mIsNewNote){
-                DataManager.getInstance().removeNote(mNotePosition);
+                DataManager.getInstance().removeNote(mNotePosition);//if its a new note and cancel is set true
             } else {
-                storePreviousNoteValues();
+                storePreviousNoteValues();//the original values restored after is cancel is set to true
             }
         }else {
-            saveNote();
+            saveNote();//if leaving save the edits
         }
     }
+
+
 
     private void storePreviousNoteValues() {
         if (mIsNewNote)
@@ -145,9 +152,6 @@ public class NoteActivity extends AppCompatActivity {
             mNote = DataManager.getInstance().getNotes().get(position);
 
         }
-
-
-
     }
 
     private void createNewNote() {
