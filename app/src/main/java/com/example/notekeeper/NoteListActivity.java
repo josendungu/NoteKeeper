@@ -19,6 +19,7 @@ import java.util.List;
 public class NoteListActivity extends AppCompatActivity {
 
     private static final String TAG = "NoteListActivity";
+    private NoteRecyclerAdapter mNoteRecyclerAdapter;
     //private ArrayAdapter<NoteInfo> mAdapterNotes;
 
     @Override
@@ -43,7 +44,7 @@ public class NoteListActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //mAdapterNotes.notifyDataSetChanged();
+        mNoteRecyclerAdapter.notifyDataSetChanged();
     }
 
     private void initializeDisplayContent() {
@@ -52,9 +53,9 @@ public class NoteListActivity extends AppCompatActivity {
         recyclerNotes.setLayoutManager(noteLayoutManager);
 
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
-        final NoteRecyclerAdapter noteRecyclerAdapter = new NoteRecyclerAdapter(this, notes);
+        mNoteRecyclerAdapter = new NoteRecyclerAdapter(this, notes);
 
-        recyclerNotes.setAdapter(noteRecyclerAdapter);
+        recyclerNotes.setAdapter(mNoteRecyclerAdapter);
     }
 
 }
