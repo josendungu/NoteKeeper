@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_courses) {
             displayCourses();
         } else if (id == R.id.nav_share) {
-            handleSelection("Share");
+            handleSelection(getString(R.string.nav_share_message));
         } else if (id == R.id.nav_send) {
-            handleSelection("Send");
+            handleSelection(getString(R.string.nav_send_message));
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

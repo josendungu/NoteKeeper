@@ -18,4 +18,6 @@
     <string name="title_activity_note">NoteActivity</string>
     <string name="note_title_hint">Note Title</string>
     <string name="note_text_hint">Note Text</string>
+    <string name="nav_share_message">Share</string>
+    <string name="nav_send_message">Send</string>
 </resources>
