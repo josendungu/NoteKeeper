@@ -13,11 +13,19 @@ public final class NoteInfo implements Parcelable{
     private String mTitle;
     private String mText;
     private static final String TAG = "NoteInfo";
+    private int mId;
 
     public NoteInfo(CourseInfo course, String title, String text) {
         mCourse = course;
         mTitle = title;
         mText = text;
+    }
+
+    public NoteInfo(CourseInfo mCourse, String mTitle, String mText, int _id) {
+        this.mCourse = mCourse;
+        this.mTitle = mTitle;
+        this.mText = mText;
+        this.mId = _id;
     }
 
     private NoteInfo(Parcel source) {
@@ -100,4 +108,8 @@ public final class NoteInfo implements Parcelable{
             return new NoteInfo[size];
         }
     };
+
+    public int getId() {
+        return mId;
+    }
 }

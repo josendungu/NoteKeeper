@@ -1,7 +1,6 @@
 package com.example.notekeeper;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -124,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void initializeDisplayContent() {
+        DataManager.loadFromDatabase(mDbOpeHelper);
         mRecyclerItems = (RecyclerView) findViewById(R.id.list_items);
         mNoteLayoutManager = new LinearLayoutManager(this);
         mCoursesLayoutManager = new GridLayoutManager(this, getResources().getInteger(R.integer.course_grid_span));
@@ -140,7 +140,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mRecyclerItems.setLayoutManager(mNoteLayoutManager);
         mRecyclerItems.setAdapter(mNoteRecyclerAdapter);
 
-        SQLiteDatabase db = mDbOpeHelper.getReadableDatabase();
 
         selectNavigationMenuItem(R.id.nav_notes);
     }
