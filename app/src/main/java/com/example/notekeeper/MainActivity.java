@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onResume() {
         //call each time activity is resumed
         super.onResume();
-        getSupportLoaderManager().initLoader(LOADER_NOTES, null, this);
+        getSupportLoaderManager().restartLoader(LOADER_NOTES, null, this);
     }
 
     private void loadNotes() {
